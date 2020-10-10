@@ -1,25 +1,21 @@
-// store/index.ts
-import {
-  configureStore,
-  ThunkAction,
-  Action,
-  getDefaultMiddleware,
-} from '@reduxjs/toolkit';
-import logger from 'redux-logger';
-// import todoSlice from './example/exampleSlice';
+import {configureStore, Action} from '@reduxjs/toolkit';
+import {ThunkAction} from 'redux-thunk';
 
-export const store = configureStore({
-  reducer: {
-    // todoSlice: todoSlice,
-  },
-  middleware: getDefaultMiddleware().concat(logger),
-  devTools: process.env.NODE_ENV !== 'production',
+import rootReducer, {RootState} from '../reducer';
+
+const store = configureStore({
+  reducer: rootReducer,
 });
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  RootState,
-  unknown,
-  Action<string>
->;
+// if (process.env.NODE_ENV === 'development' && module.hot) {
+//   module.hot.accept('./rootReducer', () => {
+//     const newRootReducer = require('./rootReducer').default;
+//     store.replaceReducer(newRootReducer);
+//   });
+// }
+
+export type AppDispatch = typeof store.dispatch;
+
+export type AppThunk = ThunkAction<void, RootState, unknown, Action<string>>;
+
+export default store;
